@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/bubbles/progress"
 	"github.com/charmbracelet/bubbles/textinput"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -34,11 +34,11 @@ type tickMsg time.Time
 
 var (
 	statusMessageStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FFFF00")).
-		Bold(true)
+				Foreground(lipgloss.Color("#FFFF00")).
+				Bold(true)
 	completedStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#00FF00")).
-		Bold(true)
+			Foreground(lipgloss.Color("#00FF00")).
+			Bold(true)
 )
 
 func initialModel() model {
@@ -54,7 +54,7 @@ func initialModel() model {
 		progress.WithoutPercentage(),
 		progress.WithSolidFill("green"),
 	)
-	
+
 	return model{
 		textInput: ti,
 		state:     inputtingTime,
@@ -126,7 +126,7 @@ func formatDuration(d time.Duration) string {
 	m := d / time.Minute
 	d -= m * time.Minute
 	s := d / time.Second
-	
+
 	if h > 0 {
 		return fmt.Sprintf("%02d:%02d:%02d", h, m, s)
 	}
@@ -152,29 +152,29 @@ func (m model) View() string {
 		percentComplete := float64(elapsed) / float64(m.duration)
 
 		m.progress.SetPercent(percentComplete)
-		
+
 		progressBar := m.progress.View()
 		percentage := fmt.Sprintf("%.1f%%", percentComplete*100)
-		
+
 		paddingWidth := 40 - len(percentage)
 		padding := strings.Repeat(" ", paddingWidth)
-		
+
 		s.WriteString(progressBar)
 		s.WriteString(padding)
 		s.WriteString(statusMessageStyle.Render(percentage))
 		s.WriteString("\n\n")
-		
+
 		if m.done {
 			s.WriteString(completedStyle.Render("Done!\n\n"))
 		}
-		
-		s.WriteString(fmt.Sprintf("Elapsed: %s / Total: %s\n", 
-			formatDuration(elapsed), 
+
+		s.WriteString(fmt.Sprintf("Elapsed: %s / Total: %s\n",
+			formatDuration(elapsed),
 			formatDuration(m.duration)))
-		s.WriteString(fmt.Sprintf("Seconds: %.0f / %.0f\n\n", 
-			elapsed.Seconds(), 
+		s.WriteString(fmt.Sprintf("Seconds: %.0f / %.0f\n\n",
+			elapsed.Seconds(),
 			m.duration.Seconds()))
-		
+
 		s.WriteString("Press Esc to quit\n")
 	}
 
